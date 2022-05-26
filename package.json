@@ -6,7 +6,9 @@
   "scripts": {
     "start": "node dist/app.js",
     "build": "npx tsc",
-    "dev": "concurrently \"npx tsc --watch\" \"nodemon -q dist/app.js\""
+    "dev": "concurrently \"npx tsc --watch\" \"nodemon -q dist/app.js\"",
+    "seed": "node --loader ts-node/esm prisma/seed.ts",
+    "migrate": "npx prisma migrate dev"
   },
   "repository": {
     "type": "git",
@@ -33,6 +35,7 @@
     "concurrently": "^7.2.0",
     "nodemon": "^2.0.16",
     "prisma": "^3.14.0",
-    "typescript": "^4.6.4"
+    "ts-node": "^10.8.0",
+    "typescript": "^4.7.2"
   }
 }
