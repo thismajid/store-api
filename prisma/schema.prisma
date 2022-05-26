@@ -15,6 +15,7 @@ model Product {
   title       String   @db.VarChar(255)
   description String
   image       String
+  price       Float
   author      User     @relation(fields: [authorId], references: [id])
   authorId    Int
   category    Category @relation(fields: [categoryId], references: [id])

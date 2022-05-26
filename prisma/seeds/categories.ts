@@ -1,0 +1,14 @@
+export const categories = [
+    {
+        id: 1,
+        title: 'men\'s clothing',
+    },
+    {
+        id: 2,
+        title: 'jewelery'
+    },
+    {
+        id: 3,
+        title: 'electronics'
+    }
+]
