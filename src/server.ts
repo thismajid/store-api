@@ -1,7 +1,10 @@
 import App from './app';
 
-import IndexRoute from "./routes";
+import IndexRoute from "./routes/index";
+import {ProductsRoute} from "./routes/products";
 
-const app = new App([new IndexRoute()]);
+// @ts-ignore
+const app = new App([new IndexRoute(), new ProductsRoute()]);
+
 
 app.listen();
