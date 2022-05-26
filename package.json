@@ -4,11 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node dist/app.js",
+    "start": "npm run build && node ./dist/server.js",
     "build": "npx tsc",
     "dev": "concurrently \"npx tsc --watch\" \"nodemon -q dist/app.js\"",
-    "seed": "node --loader ts-node/esm prisma/seed.ts",
-    "migrate": "npx prisma migrate dev"
+    "seed": "node --loader ts-node/esm src/prisma/seed.ts",
+    "migrate": "npx src/prisma migrate dev"
   },
   "repository": {
     "type": "git",

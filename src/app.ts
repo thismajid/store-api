@@ -26,7 +26,7 @@ class App {
 
   public listen() {
     this.app.listen(this.port, () => {
-      logger.info(`🚀 Server is running on localhost:${this.port} ...`);
+      logger.info(`🚀🔥 Server is running on localhost:${this.port} ...`);
     });
   }
 
