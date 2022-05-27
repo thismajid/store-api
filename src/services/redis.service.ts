@@ -41,14 +41,27 @@ class Redisio {
 
     hmset(inputs: any[], model: string){
         if(['products'].includes(model)){
-            console.log(typeof inputs, Array.isArray(inputs))
             let key, strValue;
             for (const input of inputs) {
                 key = `${model}:${input.id}`;
                 strValue = JSON.stringify(input)
-                console.log('in for loop', strValue)
                 this.getInstance(model).set(key, strValue)
             }
+        }
+    }
+
+    async hget(model: string, condition = {}){
+        const data = [];
+        let temp, keys;
+        try{
+             keys = await this.getInstance(model).keys("*")
+            for (const key of keys) {
+                temp = await this.getInstance(model).get(key.replace('cache:', ''))
+                data.push(JSON.parse(temp))
+            }
+            return data
+        }catch(err){
+            logger.error(err)
         }
     }
 

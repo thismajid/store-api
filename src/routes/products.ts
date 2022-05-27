@@ -23,16 +23,12 @@ export class ProductsRoute implements Routes{
     private initializeRoutes() {
         this.router.get(this.path,async (req: Request,res: Response)=>{
             try{
-
-                const products = await prisma.product.findMany({});
-
-
-                // this.productRedis.set(products)
-
-                // @ts-ignore
-                this.productRedis.hmset(products, 'products' )
-
-                // console.log(this.productRedis)
+                let products = await this.productRedis.hget('products');
+                if(!products) {
+                    console.log('into if block')
+                    products = await prisma.product.findMany({});
+                    this.productRedis.hmset(products, 'products' )
+                }
                 res.json({
                     message: 'all products retrieved successfully',
                     products
