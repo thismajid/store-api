@@ -6,9 +6,14 @@ import {options, usersTtl} from "./../configs/redis.config";
 let instance: any = null;
 
 class Redisio {
+    constructor(name: string) {
+        this.getInstance(name)
+
+    }
+
     connection() {
         instance = {
-            products: new Redis({...options, db: 1})
+            products: new Redis({...options, db: 7})
         }
         Object.assign(instance, {
             redisClient1: instance.products,
@@ -32,6 +37,19 @@ class Redisio {
             this.connection();
         }
         return instance[name];
+    }
+
+    hmset(inputs: any[], model: string){
+        if(['products'].includes(model)){
+            console.log(typeof inputs, Array.isArray(inputs))
+            let key, strValue;
+            for (const input of inputs) {
+                key = `${model}:${input.id}`;
+                strValue = JSON.stringify(input)
+                console.log('in for loop', strValue)
+                this.getInstance(model).set(key, strValue)
+            }
+        }
     }
 
     // hmset(inputEntity: any, model: string) {
