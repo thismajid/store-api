@@ -8,8 +8,11 @@ const options = {
     keyPrefix: process.env.REDIS_PREFIX,
 };
 
-module.exports = {
+const usersTtl = Number(process.env.REDIS_USER_TTL || 10800);
+const ttl = Number(process.env.REDIS_TTL || 86400);
+
+export {
     options,
-    usersTtl: Number(process.env.REDIS_USER_TTL || 10800), // three hour (in seconds)
-    ttl: Number(process.env.REDIS_TTL || 86400), // one day
-};
+    usersTtl,
+    ttl
+}
