@@ -24,8 +24,7 @@ export class ProductsRoute implements Routes{
         this.router.get(this.path,async (req: Request,res: Response)=>{
             try{
                 let products = await this.productRedis.hget('products');
-                if(!products) {
-                    console.log('into if block')
+                if(!products || products.length === 0) {
                     products = await prisma.product.findMany({});
                     this.productRedis.hmset(products, 'products' )
                 }
@@ -37,6 +36,23 @@ export class ProductsRoute implements Routes{
                 logger.error(err)
             }
         });
+
+        this.router.get(`${this.path}/:id`, async(req: Request, res: Response)=>{
+            try{
+                const {id} = req.params
+                let product = await this.productRedis.hget('products', {id: +id})
+                if(!product){
+                    product = await prisma.product.findUnique({where: {id: +id}})
+                    this.productRedis.hmset(product, 'products' )
+                }
+                res.json({
+                    message: 'product retrieved successfully',
+                    product
+                })
+            }catch(err){
+                logger.error(err)
+            }
+        })
     }
 }
 
