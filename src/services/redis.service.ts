@@ -3,7 +3,7 @@ import logger from "../utils/logger";
 
 import {options} from "./../configs/redis.config";
 
-let instance = null;
+let instance: any = null;
 
 class Redisio {
     connection() {
@@ -15,8 +15,17 @@ class Redisio {
         });
     }
 
+    model(name = ""){
+        if(!instance.name){
+            this.connection();
+        }
 
-
+        return name ? {
+            hmset: (entity) => this.hmset(entity,name),
+        } : {
+            getInstance: () => this.instance[name],
+        }
+    }
 
 }
 
