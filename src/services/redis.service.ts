@@ -23,10 +23,16 @@ class Redisio {
         return name ? {
             hmset: (entity) => this.hmset(entity,name),
         } : {
-            getInstance: () => this.instance[name],
+            getInstance: () => instance[name],
         }
     }
 
+    getInstance(name: string) {
+        if (instance === null) {
+            this.connection();
+        }
+        return instance[name];
+    }
 }
 
 export default Redisio
