@@ -1,13 +1,8 @@
 import { Router , Request, Response } from 'express';
-import { PrismaClient } from "@prisma/client";
-
 
 import {Routes} from './../interfaces/route.interface'
 import logger from "../utils/logger";
 import Redisio from "../services/redis.service";
-
-const prisma = new PrismaClient();
-
 
 
 export class ProductsRoute implements Routes{
