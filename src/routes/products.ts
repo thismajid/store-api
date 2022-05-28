@@ -1,15 +1,10 @@
 import { Router , Request, Response } from 'express';
 
 import {Routes} from './../interfaces/route.interface'
-import logger from "../utils/logger";
-import Redisio from "../services/redis.service";
-
 
 export class ProductsRoute implements Routes{
     public router = Router();
     public path = '/products';
-    private productRedis = new Redisio('products')
-
 
     constructor() {
         this.initializeRoutes();
