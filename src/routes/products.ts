@@ -1,31 +1,19 @@
 import { Router , Request, Response } from 'express';
 
 import {Routes} from './../interfaces/route.interface'
+import ProductController from "../controllers/product.controller";
 
 export class ProductsRoute implements Routes{
     public router = Router();
     public path = '/products';
+    private controller = new ProductController()
 
     constructor() {
         this.initializeRoutes();
     }
 
     private initializeRoutes() {
-        this.router.get(this.path,async (req: Request,res: Response)=>{
-            try{
-                let products = await this.productRedis.hget('products');
-                if(!products || products.length === 0) {
-                    products = await prisma.product.findMany({});
-                    this.productRedis.hmset(products, 'products' )
-                }
-                res.json({
-                    message: 'all products retrieved successfully',
-                    products
-                })
-            }catch(err){
-                logger.error(err)
-            }
-        });
+        this.router.get(this.path, this.controller.getAllProducts);
 
         this.router.get(`${this.path}/:id`, async(req: Request, res: Response)=>{
             try{
