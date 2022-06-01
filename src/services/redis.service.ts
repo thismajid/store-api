@@ -2,17 +2,13 @@ import Redis from 'ioredis';
 import logger from "../utils/logger";
 
 import {options, usersTtl} from "./../configs/redis.config";
+import conditionType from "../interfaces/redis/condition.interface";
 
 let instance: any = null;
-
-interface conditionType {
-    id?: number
-}
 
 class Redisio {
     constructor(name: string) {
         this.getInstance(name)
-
     }
 
     connection() {
@@ -56,7 +52,7 @@ class Redisio {
         }
     }
 
-    async hget(model: string, condition: conditionType){
+    async hget(model: string, condition?: conditionType){
         try{
             let key = `${model}`;
             // @ts-ignore
