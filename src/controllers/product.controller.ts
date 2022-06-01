@@ -8,8 +8,6 @@ const prisma = new PrismaClient();
 const productRedis = new Redisio('products')
 
 class ProductController {
-    // public productRedis = new Redisio('products')
-
     constructor() {
     }
 
