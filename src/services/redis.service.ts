@@ -5,6 +5,10 @@ import {options, usersTtl} from "./../configs/redis.config";
 
 let instance: any = null;
 
+interface conditionType {
+    id?: number
+}
+
 class Redisio {
     constructor(name: string) {
         this.getInstance(name)
@@ -52,7 +56,7 @@ class Redisio {
         }
     }
 
-    async hget(model: string, condition = {}){
+    async hget(model: string, condition: conditionType){
         try{
             let key = `${model}`;
             // @ts-ignore
