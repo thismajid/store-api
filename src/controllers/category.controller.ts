@@ -18,7 +18,7 @@ class CategoryController {
     let categories = await categoriesRedis.hget("categories");
     if (!categories) {
       categories = await prisma.category.findMany({});
-      categories && (await categoriesRedis.hmset(categories, "categories"));
+      await categoriesRedis.hmset(categories, "categories");
     }
     res.json({
       message: "all categories retrieved successfully",
