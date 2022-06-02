@@ -1,3 +1,4 @@
 export default interface conditionType {
-    id?: number
+  id?: number;
+  modelName?: string;
 }
