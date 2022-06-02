@@ -3,6 +3,7 @@ import logger from "../utils/logger";
 
 import { options, usersTtl } from "./../configs/redis.config";
 import conditionType from "../interfaces/redis/condition.interface";
+import isEmpty from "../utils/isEmpty.util";
 
 let instance: any = null;
 
@@ -44,7 +45,7 @@ class Redisio {
   }
 
   hmset(inputs: any, model: string, keyName?: string) {
-    if (["products", "productsInCategory"].includes(model)) {
+    if (["products", "productsInCategory", "categories"].includes(model)) {
       let key;
       if (Array.isArray(inputs)) {
         key = keyName ? `${model}:${keyName}` : `${model}`;
@@ -57,10 +58,15 @@ class Redisio {
 
   async hget(model: string, condition?: conditionType) {
     try {
-      let key = `${model}`;
-      key = condition?.id
-        ? `${model}:${condition?.id}`
-        : `${model}:${condition?.modelName}`;
+      let key;
+      if (condition && !isEmpty(condition)) {
+        key = condition?.id ? `${model}:${condition?.id}` : `${model}`;
+        key = condition?.modelName
+          ? `${model}:${condition?.modelName}`
+          : `${model}`;
+      } else {
+        key = `${model}`;
+      }
       const data = await this.getInstance(model).get(key);
       return JSON.parse(data);
     } catch (err) {
