@@ -20,8 +20,8 @@ model Product {
   authorId    Int
   category    Category @relation(fields: [categoryId], references: [id])
   categoryId  Int
-  rating      Rating   @relation(fields: [ratingId], references: [id]) // references `id` of `Profile`
-  ratingId    Int      @unique // 
+  rating      Rating   @relation(fields: [ratingId], references: [id])
+  ratingId    Int      @unique
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
