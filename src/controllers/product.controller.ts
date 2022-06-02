@@ -7,6 +7,7 @@ import Redisio from "../services/redis.service";
 const prisma = new PrismaClient();
 const productRedis = new Redisio("products");
 const productsCategoryRedis = new Redisio("productsInCategory");
+const categoriesRedis = new Redisio("categories");
 
 class ProductController {
   constructor() {}
@@ -43,6 +44,20 @@ class ProductController {
         message: "product retrieved successfully",
         product,
       });
+    } catch (err) {
+      logger.error(err);
+    }
+  }
+
+  public async getAllCategories(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
+    const categories = await categoriesRedis.hget("categories");
+    if (!categories) {
+    }
+    try {
     } catch (err) {
       logger.error(err);
     }
