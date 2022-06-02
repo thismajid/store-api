@@ -20,25 +20,36 @@ model Product {
   authorId    Int
   category    Category @relation(fields: [categoryId], references: [id])
   categoryId  Int
+  rating      Rating   @relation(fields: [ratingId], references: [id]) // references `id` of `Profile`
+  ratingId    Int      @unique // 
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  email     String   @unique
+  id        Int       @id @default(autoincrement())
+  email     String    @unique
   firstname String
   lastname  String
   password  String
-  products     Product[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  products  Product[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
 }
 
 model Category {
+  id        Int       @id @default(autoincrement())
+  title     String    @db.VarChar(255)
+  products  Product[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Rating {
   id        Int      @id @default(autoincrement())
-  title     String   @db.VarChar(255)
-  products     Product[]
+  rate      Float
+  count     Int
+  product   Product?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
