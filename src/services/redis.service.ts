@@ -15,10 +15,12 @@ class Redisio {
     instance = {
       products: new Redis({ ...options, db: 7 }),
       productsInCategory: new Redis({ ...options, db: 8 }),
+      categories: new Redis({ ...options, db: 9 }),
     };
     Object.assign(instance, {
       redisClient1: instance.products,
       redisClient8: instance.productsInCategory,
+      redisClient9: instance.categories,
     });
   }
 
