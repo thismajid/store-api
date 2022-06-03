@@ -57,7 +57,30 @@ class ProductController {
       const { id } = req.params;
       let product = await productRedis.hget("products", { id: +id });
       if (!product) {
-        product = await prisma.product.findUnique({ where: { id: +id } });
+        product = await prisma.product.findUnique({
+          where: {
+            id: +id,
+          },
+          include: {
+            author: {
+              select: {
+                firstname: true,
+                lastname: true,
+              },
+            },
+            category: {
+              select: {
+                title: true,
+              },
+            },
+            rating: {
+              select: {
+                count: true,
+                rate: true,
+              },
+            },
+          },
+        });
         productRedis.hmset(product, "products");
       }
       res.json({
