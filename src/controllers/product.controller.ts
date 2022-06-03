@@ -92,20 +92,6 @@ class ProductController {
     }
   }
 
-  public async getAllCategories(
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ) {
-    const categories = await categoriesRedis.hget("categories");
-    if (!categories) {
-    }
-    try {
-    } catch (err) {
-      logger.error(err);
-    }
-  }
-
   public async getAllProductsInCategory(
     req: Request,
     res: Response,
