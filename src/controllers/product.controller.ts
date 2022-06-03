@@ -16,7 +16,27 @@ class ProductController {
     try {
       let products = await productRedis.hget("products");
       if (!products || products.length === 0) {
-        products = await prisma.product.findMany({});
+        products = await prisma.product.findMany({
+          include: {
+            author: {
+              select: {
+                firstname: true,
+                lastname: true,
+              },
+            },
+            category: {
+              select: {
+                title: true,
+              },
+            },
+            rating: {
+              select: {
+                count: true,
+                rate: true,
+              },
+            },
+          },
+        });
         productRedis.hmset(products, "products");
       }
       res.json({
