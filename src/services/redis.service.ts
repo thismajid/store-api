@@ -59,13 +59,10 @@ class Redisio {
   async hget(model: string, condition?: conditionType) {
     try {
       let key;
+      key = `${model}`;
       if (condition && !isEmpty(condition)) {
-        key = condition?.id ? `${model}:${condition?.id}` : `${model}`;
-        key = condition?.modelName
-          ? `${model}:${condition?.modelName}`
-          : `${model}`;
-      } else {
-        key = `${model}`;
+        if (condition?.id) key = `${model}:${condition?.id}`;
+        if (condition?.modelName) key = `${model}:${condition?.modelName}`;
       }
       const data = await this.getInstance(model).get(key);
       return JSON.parse(data);
