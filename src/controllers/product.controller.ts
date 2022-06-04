@@ -44,88 +44,77 @@ class ProductController {
     }
   }
 
-  //   public async addProduct(req: Request, res: Response, next: NextFunction) {
-  //     try {
-  //       const { title, description, price, category, image } = req.body;
-  //       const categoryId = await prisma.category.findFirst({
-  //         where: {
-  //           title: category,
-  //         },
-  //         select: {
-  //           id: true,
-  //         },
-  //       });
-  //       if (!categoryId?.id) {
-  //         //todo
-  //       }
-  //       // await prisma.rating.create({
-  //       //   data: {
-  //       //     id: 21,
-  //       //     rate: 0,
-  //       //     count: 0,
-  //       //   },
-  //       // });
-  //       const newProduct = await prisma.product.create({
-  //         data: {
-  //           title,
-  //           price,
-  //           description,
-  //           authorId: 1,
-  //           categoryId: 1,
-  //           image,
-  //           ratingId: 3,
-  //         },
-  //       });
+  public async addProduct(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { title, description, price, category, image } = req.body;
+      const foundCategory = await prisma.category.findFirst({
+        where: {
+          name: category,
+        },
+        select: {
+          id: true,
+        },
+      });
+      if (!foundCategory?.id) {
+        //todo
+      }
+      await prisma.rating.upsert({
+        where: { id: 21 },
+        update: {
+          count: 0,
+          rate: 0,
+        },
+        create: {
+          count: 0,
+          rate: 0,
+        },
+      });
+      const newProduct = await prisma.product.upsert({
+        where: { id: 21 },
+        update: {
+          title,
+          price,
+          description,
+          categories: {
+            create: [
+              {
+                category: {
+                  connect: {
+                    id: foundCategory?.id,
+                  },
+                },
+              },
+            ],
+          },
+          image,
+          createdAt: new Date(),
+        },
+        create: {
+          title,
+          price,
+          description,
+          authorId: 1,
+          categories: {
+            create: [
+              {
+                category: {
+                  connect: {
+                    id: foundCategory?.id,
+                  },
+                },
+              },
+            ],
+          },
+          image,
+          ratingId: 21,
+        },
+      });
 
-  //       // const newProduct = await prisma.product.upsert({
-  //       //   where: { id: 21 },
-  //       //   update: {
-  //       //     title,
-  //       //     description,
-  //       //     price,
-  //       //     authorId: 1,
-  //       //     categoryId: categoryId?.id,
-  //       //     image,
-  //       //     rating: {
-  //       //       create: {
-  //       //         count: 0,
-  //       //         rate: 0,
-  //       //       },
-  //       //     },
-  //       //   },
-  //       //   create: {
-  //       //     title,
-  //       //     description,
-  //       //     price,
-  //       //     authorId: 1,
-  //       //     categoryId: categoryId?.id,
-  //       //     image,
-  //       //     rating: {
-  //       //       create: {
-  //       //         count: 0,
-  //       //         rate: 0,
-  //       //       },
-  //       //     },
-  //       //   },
-  //       // });
-  //       // const newRating = await prisma.rating.create({
-  //       //   data: {
-  //       //     id: 21,
-  //       //   },
-  //       // });
-  //       // const newProduct =
-  //       //   categoryId &&
-  //       //   (await prisma.product.create({
-  //       //     data: {
-  //       //       id: 21,
-
-  //       //     },
-  //       //   }));
-  //       res.json(newProduct);
-  //     } catch (err) {
-  //       logger.error(err);
-  //     }
-  //   }
+      res.json(newProduct);
+    } catch (err) {
+      logger.error(err);
+    }
+  }
 
   public async getSingleProduct(
     req: Request,
