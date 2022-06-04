@@ -15,6 +15,8 @@ export class ProductsRoute implements Routes {
   private initializeRoutes() {
     this.router.get(this.path, this.controller.getAllProducts);
 
+    this.router.post(this.path, this.controller.addProduct);
+
     this.router.get(`${this.path}/:id`, this.controller.getSingleProduct);
 
     this.router.get(
