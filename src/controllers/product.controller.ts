@@ -167,55 +167,61 @@ class ProductController {
     }
   }
 
-  //   public async getAllProductsInCategory(
-  //     req: Request,
-  //     res: Response,
-  //     next: NextFunction
-  //   ) {
-  //     try {
-  //       const { categoryName } = req.params;
-  //       let products;
-  //       products = await productsCategoryRedis.hget("productsInCategory", {
-  //         modelName: categoryName,
-  //       });
-  //       if (!products) {
-  //         const category = await prisma.category.findFirst({
-  //           where: {
-  //             title: categoryName,
-  //           },
-  //         });
-  //         products =
-  //           category &&
-  //           (await prisma.product.findMany({
-  //             where: {
-  //               categoryId: category.id,
-  //             },
-  //             include: {
-  //               category: true,
-  //               author: {
-  //                 select: {
-  //                   id: true,
-  //                   firstname: true,
-  //                   lastname: true,
-  //                   email: true,
-  //                 },
-  //               },
-  //             },
-  //           }));
-  //         await productsCategoryRedis.hmset(
-  //           products,
-  //           "productsInCategory",
-  //           categoryName
-  //         );
-  //       }
-  //       res.json({
-  //         message: "all products retrieved successfully",
-  //         products,
-  //       });
-  //     } catch (err) {
-  //       logger.error(err);
-  //     }
-  //   }
+  public async getAllProductsInCategory(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
+    try {
+      const { categoryName } = req.params;
+      let products;
+      products = await productsCategoryRedis.hget("productsInCategory", {
+        modelName: categoryName,
+      });
+      if (!products) {
+        const category = await prisma.category.findFirst({
+          where: {
+            name: categoryName,
+          },
+        });
+        products =
+          category &&
+          (await prisma.product.findMany({
+            where: {
+              categories: {
+                some: {
+                  category: {
+                    id: category?.id,
+                  },
+                },
+              },
+            },
+            include: {
+              categories: { include: { category: true } },
+              author: {
+                select: {
+                  id: true,
+                  firstname: true,
+                  lastname: true,
+                  email: true,
+                },
+              },
+            },
+          }));
+        await productsCategoryRedis.hmset(
+          products,
+          "productsInCategory",
+          categoryName
+        );
+      }
+      res.json({
+        message: "all products retrieved successfully",
+        products,
+      });
+    } catch (err) {
+      logger.error(err);
+    }
+  }
 }
 
 export default ProductController;
