@@ -10,22 +10,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Product {
-  id          Int      @id @default(autoincrement())
-  title       String   @db.VarChar(255)
-  description String
-  image       String
-  price       Float
-  author      User     @relation(fields: [authorId], references: [id])
-  authorId    Int
-  category    Category @relation(fields: [categoryId], references: [id])
-  categoryId  Int
-  rating      Rating   @relation(fields: [ratingId], references: [id])
-  ratingId    Int      @unique
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-}
-
 model User {
   id        Int       @id @default(autoincrement())
   email     String    @unique
@@ -37,12 +21,38 @@ model User {
   updatedAt DateTime  @updatedAt
 }
 
+model Product {
+  id          Int                 @id @default(autoincrement())
+  title       String              @db.VarChar(255)
+  description String
+  image       String
+  price       Float
+  author      User                @relation(fields: [authorId], references: [id])
+  authorId    Int
+  categories  CategoriesOnPosts[]
+  rating      Rating              @relation(fields: [ratingId], references: [id])
+  ratingId    Int                 @unique
+  createdAt   DateTime            @default(now())
+  updatedAt   DateTime            @updatedAt
+}
+
 model Category {
-  id        Int       @id @default(autoincrement())
-  title     String    @db.VarChar(255)
-  products  Product[]
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  id        Int                 @id @default(autoincrement())
+  name      String              @unique @db.VarChar(255)
+  products  CategoriesOnPosts[]
+  createdAt DateTime            @default(now())
+  updatedAt DateTime            @updatedAt
+}
+
+model CategoriesOnPosts {
+  product    Product  @relation(fields: [productId], references: [id])
+  productId  Int
+  category   Category @relation(fields: [categoryId], references: [id])
+  categoryId Int
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@id([productId, categoryId])
 }
 
 model Rating {
@@ -53,3 +63,23 @@ model Rating {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+// model User {
+//   id          Int                @id @default(autoincrement())
+//   name        String
+//   investments UsersInvestments[]
+// }
+
+// model UsersInvestments {
+//   user         User       @relation(fields: [userId], references: [id])
+//   userId       Int
+//   investment   Investment @relation(fields: [investmentId], references: [id])
+//   investmentId Int
+
+//   @@id([userId, investmentId])
+// }
+
+// model Investment {
+//   id    Int                @id @default(autoincrement())
+//   users UsersInvestments[]
+// }
