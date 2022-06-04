@@ -7,17 +7,22 @@ import { ratings } from "./seeds/ratings";
 const prisma = new PrismaClient();
 
 async function main() {
-  await prisma.user.createMany({
-    data: createAdminUser,
-  });
-  await prisma.category.createMany({
-    data: categories,
-  });
-  await prisma.rating.createMany({
-    data: ratings,
-  });
-  await prisma.product.createMany({
-    data: products,
+  await prisma.$transaction([
+    prisma.user.createMany({
+      data: createAdminUser,
+    }),
+    prisma.category.createMany({
+      data: categories,
+    }),
+    prisma.rating.createMany({
+      data: ratings,
+    }),
+  ]);
+
+  products.map(async (product) => {
+    await prisma.product.create({
+      data: product,
+    });
   });
 }
 
