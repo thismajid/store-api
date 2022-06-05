@@ -58,58 +58,76 @@ class ProductController {
       if (!foundCategory?.id) {
         //todo
       }
-      await prisma.rating.upsert({
-        where: { id: 21 },
-        update: {
-          count: 0,
-          rate: 0,
-        },
-        create: {
-          count: 0,
-          rate: 0,
-        },
-      });
-      const newProduct = await prisma.product.upsert({
-        where: { id: 21 },
-        update: {
-          title,
-          price,
-          description,
-          categories: {
-            create: [
-              {
-                category: {
-                  connect: {
-                    id: foundCategory?.id,
-                  },
-                },
-              },
-            ],
-          },
-          image,
-          createdAt: new Date(),
-        },
-        create: {
-          title,
-          price,
-          description,
-          authorId: 1,
-          categories: {
-            create: [
-              {
-                category: {
-                  connect: {
-                    id: foundCategory?.id,
-                  },
-                },
-              },
-            ],
-          },
-          image,
-          ratingId: 21,
-        },
-      });
 
+      const [productRating, newProduct] = await Promise.all([
+        prisma.rating.upsert({
+          where: { id: 21 },
+          update: {
+            count: 0,
+            rate: 0,
+          },
+          create: {
+            count: 0,
+            rate: 0,
+          },
+        }),
+        prisma.product.upsert({
+          where: { id: 21 },
+          update: {
+            title,
+            price,
+            description,
+            image,
+            createdAt: new Date(),
+            categories: {
+              deleteMany: {},
+              create: [
+                {
+                  category: {
+                    connect: {
+                      id: foundCategory?.id,
+                    },
+                  },
+                },
+              ],
+            },
+          },
+          create: {
+            title,
+            price,
+            description,
+            authorId: 1,
+            categories: {
+              create: [
+                {
+                  category: {
+                    connect: {
+                      id: foundCategory?.id,
+                    },
+                  },
+                },
+              ],
+            },
+            image,
+            ratingId: 21,
+          },
+          include: {
+            author: {
+              select: {
+                firstname: true,
+                lastname: true,
+              },
+            },
+            categories: { include: { category: true } },
+            rating: {
+              select: {
+                count: true,
+                rate: true,
+              },
+            },
+          },
+        }),
+      ]);
       res.json(newProduct);
     } catch (err) {
       logger.error(err);
