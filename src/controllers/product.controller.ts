@@ -41,6 +41,7 @@ class ProductController {
       });
     } catch (err) {
       logger.error(err);
+      next(err);
     }
   }
 
@@ -56,7 +57,7 @@ class ProductController {
         },
       });
       if (!foundCategory?.id) {
-        //todo
+        throw new Error("Category not found");
       }
 
       const [productRating, newProduct] = await Promise.all([
@@ -131,6 +132,7 @@ class ProductController {
       res.json(newProduct);
     } catch (err) {
       logger.error(err);
+      next(err);
     }
   }
 
@@ -171,6 +173,7 @@ class ProductController {
       });
     } catch (err) {
       logger.error(err);
+      next(err);
     }
   }
 
@@ -227,6 +230,7 @@ class ProductController {
       });
     } catch (err) {
       logger.error(err);
+      next(err);
     }
   }
 }
