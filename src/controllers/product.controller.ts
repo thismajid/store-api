@@ -3,11 +3,11 @@ import { PrismaClient } from "@prisma/client";
 
 import logger from "../utils/logger";
 import Redisio from "../services/redis.service";
+import CategoryNotFoundException from "../exceptions/CategoryNotFoundException";
 
 const prisma = new PrismaClient();
 const productRedis = new Redisio("products");
 const productsCategoryRedis = new Redisio("productsInCategory");
-const categoriesRedis = new Redisio("categories");
 
 class ProductController {
   constructor() {}
@@ -57,9 +57,8 @@ class ProductController {
         },
       });
       if (!foundCategory?.id) {
-        throw new Error("Category not found");
+        throw new CategoryNotFoundException(category);
       }
-
       const [productRating, newProduct] = await Promise.all([
         prisma.rating.upsert({
           where: { id: 21 },
