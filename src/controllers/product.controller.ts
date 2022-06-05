@@ -155,6 +155,8 @@ class ProductController {
       ]);
       res.json(newProduct);
     } catch (err) {
+      console.log(err);
+
       logger.error(err);
       next(err);
     }
