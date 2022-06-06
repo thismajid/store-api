@@ -4,8 +4,11 @@ import { PrismaClient } from "@prisma/client";
 import logger from "../utils/logger";
 import Redisio from "../services/redis.service";
 import CategoryNotFoundException from "../exceptions/CategoryNotFoundException";
+import ProductService from "../services/product.service";
+import isEmpty from "../utils/isEmpty.util";
 
 const prisma = new PrismaClient();
+const productsService = new ProductService();
 const productRedis = new Redisio("products");
 const productsCategoryRedis = new Redisio("productsInCategory");
 
@@ -15,48 +18,17 @@ class ProductController {
   public async getAllProducts(req: Request, res: Response, next: NextFunction) {
     try {
       let products;
-      if (req.query) {
+      if (!isEmpty(req.query)) {
         const take = Number(req.query.limit) || 10;
         const skip = Number(req.query.skip) || 0;
-        products = await prisma.product.findMany({
-          skip,
+        products = await productsService.getAllProductsWithPagination(
           take,
-          include: {
-            author: {
-              select: {
-                firstname: true,
-                lastname: true,
-              },
-            },
-            categories: { include: { category: true } },
-            rating: {
-              select: {
-                count: true,
-                rate: true,
-              },
-            },
-          },
-        });
+          skip
+        );
       } else {
         products = await productRedis.hget("products");
         if (!products || products.length === 0) {
-          products = await prisma.product.findMany({
-            include: {
-              author: {
-                select: {
-                  firstname: true,
-                  lastname: true,
-                },
-              },
-              categories: { include: { category: true } },
-              rating: {
-                select: {
-                  count: true,
-                  rate: true,
-                },
-              },
-            },
-          });
+          products = await productsService.getAllProducts();
           productRedis.hmset(products, "products");
         }
       }
