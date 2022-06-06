@@ -30,6 +30,30 @@ class ProductService {
       throw err;
     }
   }
+
+  public async getAllProducts() {
+    try {
+      return await prisma.product.findMany({
+        include: {
+          author: {
+            select: {
+              firstname: true,
+              lastname: true,
+            },
+          },
+          categories: { include: { category: true } },
+          rating: {
+            select: {
+              count: true,
+              rate: true,
+            },
+          },
+        },
+      });
+    } catch (err) {
+      throw err;
+    }
+  }
 }
 
 export default ProductService;
