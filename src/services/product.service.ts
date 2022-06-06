@@ -54,6 +54,33 @@ class ProductService {
       throw err;
     }
   }
+
+  public async getSingleProduct(id: number) {
+    try {
+      return await prisma.product.findUnique({
+        where: {
+          id,
+        },
+        include: {
+          author: {
+            select: {
+              firstname: true,
+              lastname: true,
+            },
+          },
+          categories: { include: { category: true } },
+          rating: {
+            select: {
+              count: true,
+              rate: true,
+            },
+          },
+        },
+      });
+    } catch (err) {
+      throw err;
+    }
+  }
 }
 
 export default ProductService;
