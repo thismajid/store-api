@@ -81,6 +81,41 @@ class ProductService {
       throw err;
     }
   }
+
+  public async getProductsByCategoryIdPaginate(
+    id: number,
+    take: number,
+    skip: number
+  ) {
+    try {
+      return await prisma.product.findMany({
+        take,
+        skip,
+        where: {
+          categories: {
+            some: {
+              category: {
+                id,
+              },
+            },
+          },
+        },
+        include: {
+          categories: { include: { category: true } },
+          author: {
+            select: {
+              id: true,
+              firstname: true,
+              lastname: true,
+              email: true,
+            },
+          },
+        },
+      });
+    } catch (err) {
+      throw err;
+    }
+  }
 }
 
 export default ProductService;
