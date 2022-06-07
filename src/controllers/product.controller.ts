@@ -6,9 +6,11 @@ import Redisio from "../services/redis.service";
 import CategoryNotFoundException from "../exceptions/CategoryNotFoundException";
 import ProductService from "../services/product.service";
 import isEmpty from "../utils/isEmpty.util";
+import CategoryService from "../services/category.service";
 
 const prisma = new PrismaClient();
 const productsService = new ProductService();
+const categoriesService = new CategoryService();
 const productRedis = new Redisio("products");
 const productsCategoryRedis = new Redisio("productsInCategory");
 
@@ -163,71 +165,27 @@ class ProductController {
   ) {
     try {
       const { categoryName } = req.params;
-      const foundCategory = await prisma.category.findFirst({
-        where: {
-          name: categoryName,
-        },
-      });
+      const foundCategory = await categoriesService.getCategoryByName(
+        categoryName
+      );
       if (!foundCategory) throw new CategoryNotFoundException(categoryName);
       let products;
       if (req.query) {
         const take = Number(req.query.limit) || 10;
         const skip = Number(req.query.skip) || 0;
-        products =
-          foundCategory &&
-          (await prisma.product.findMany({
-            take,
-            skip,
-            where: {
-              categories: {
-                some: {
-                  category: {
-                    id: foundCategory?.id,
-                  },
-                },
-              },
-            },
-            include: {
-              categories: { include: { category: true } },
-              author: {
-                select: {
-                  id: true,
-                  firstname: true,
-                  lastname: true,
-                  email: true,
-                },
-              },
-            },
-          }));
+        products = await productsService.getProductsByCategoryIdPaginate(
+          foundCategory.id,
+          take,
+          skip
+        );
       } else {
         products = await productsCategoryRedis.hget("productsInCategory", {
           modelName: categoryName,
         });
         if (!products) {
-          products =
-            foundCategory &&
-            (await prisma.product.findMany({
-              where: {
-                categories: {
-                  some: {
-                    category: {
-                      id: foundCategory?.id,
-                    },
-                  },
-                },
-              },
-              include: {
-                categories: { include: { category: true } },
-                author: {
-                  select: {
-                    id: true,
-                    firstname: true,
-                    lastname: true,
-                    email: true,
-                  },
-                },
-              },
-            }));
+          products = await await productsService.getProductsByCategoryId(
+            foundCategory?.id
+          );
           await productsCategoryRedis.hmset(
             products,
             "productsInCategory",
