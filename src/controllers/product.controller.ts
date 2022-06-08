@@ -7,10 +7,12 @@ import CategoryNotFoundException from "../exceptions/CategoryNotFoundException";
 import ProductService from "../services/product.service";
 import isEmpty from "../utils/isEmpty.util";
 import CategoryService from "../services/category.service";
+import RatingService from "../services/rating.service";
 
 const prisma = new PrismaClient();
 const productsService = new ProductService();
 const categoriesService = new CategoryService();
+const ratingsService = new RatingService();
 const productRedis = new Redisio("products");
 const productsCategoryRedis = new Redisio("productsInCategory");
 
@@ -47,90 +49,24 @@ class ProductController {
   public async addProduct(req: Request, res: Response, next: NextFunction) {
     try {
       const { title, description, price, category, image } = req.body;
-      const foundCategory = await prisma.category.findFirst({
-        where: {
-          name: category,
-        },
-        select: {
-          id: true,
-        },
-      });
+      const foundCategory = await categoriesService.getCategoryByName(category);
       if (!foundCategory?.id) {
         throw new CategoryNotFoundException(category);
       }
+      const product = {
+        id: 21,
+        title,
+        description,
+        price,
+        category: foundCategory?.id,
+        image,
+      };
       const [productRating, newProduct] = await Promise.all([
-        prisma.rating.upsert({
-          where: { id: 21 },
-          update: {
-            count: 0,
-            rate: 0,
-          },
-          create: {
-            count: 0,
-            rate: 0,
-          },
-        }),
-        prisma.product.upsert({
-          where: { id: 21 },
-          update: {
-            title,
-            price,
-            description,
-            image,
-            createdAt: new Date(),
-            categories: {
-              deleteMany: {},
-              create: [
-                {
-                  category: {
-                    connect: {
-                      id: foundCategory?.id,
-                    },
-                  },
-                },
-              ],
-            },
-          },
-          create: {
-            title,
-            price,
-            description,
-            authorId: 1,
-            categories: {
-              create: [
-                {
-                  category: {
-                    connect: {
-                      id: foundCategory?.id,
-                    },
-                  },
-                },
-              ],
-            },
-            image,
-            ratingId: 21,
-          },
-          include: {
-            author: {
-              select: {
-                firstname: true,
-                lastname: true,
-              },
-            },
-            categories: { include: { category: true } },
-            rating: {
-              select: {
-                count: true,
-                rate: true,
-              },
-            },
-          },
-        }),
+        ratingsService.createOrUpdate(21),
+        productsService.createOrUpdate(product),
       ]);
       res.json(newProduct);
     } catch (err) {
-      console.log(err);
-
       logger.error(err);
       next(err);
     }
