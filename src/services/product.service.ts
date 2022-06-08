@@ -145,6 +145,70 @@ class ProductService {
       throw err;
     }
   }
+
+  public async createOrUpdate(product: any) {
+    try {
+      const { id, title, description, price, image, category } = product;
+      return await prisma.product.upsert({
+        where: { id: 21 },
+        update: {
+          title,
+          price,
+          description,
+          image,
+          createdAt: new Date(),
+          categories: {
+            deleteMany: {},
+            create: [
+              {
+                category: {
+                  connect: {
+                    id: category,
+                  },
+                },
+              },
+            ],
+          },
+        },
+        create: {
+          title,
+          price,
+          description,
+          authorId: 1,
+          categories: {
+            create: [
+              {
+                category: {
+                  connect: {
+                    id: category,
+                  },
+                },
+              },
+            ],
+          },
+          image,
+          ratingId: 21,
+        },
+        include: {
+          author: {
+            select: {
+              firstname: true,
+              lastname: true,
+            },
+          },
+          categories: { include: { category: true } },
+          rating: {
+            select: {
+              count: true,
+              rate: true,
+            },
+          },
+        },
+      });
+    } catch (err) {
+      throw err;
+    }
+  }
 }
 
 export default ProductService;
