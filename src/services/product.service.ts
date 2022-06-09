@@ -210,6 +210,20 @@ class ProductService {
     }
   }
 
+  public updateProduct(product: any) {
+    try {
+      const { id, ...productData } = product;
+      return prisma.product.update({
+        where: {
+          id,
+        },
+        data: productData,
+      });
+    } catch (err) {
+      throw err;
+    }
+  }
+
   public async deleteSingleProduct(id: number) {
     try {
       return await prisma.product.delete({
