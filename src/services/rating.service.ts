@@ -8,7 +8,7 @@ class RatingService {
   public async createOrUpdate(id: number) {
     try {
       return await prisma.rating.upsert({
-        where: { id: 21 },
+        where: { id },
         update: {
           count: 0,
           rate: 0,
