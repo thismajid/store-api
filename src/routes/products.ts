@@ -39,7 +39,11 @@ export class ProductsRoute implements Routes {
       this.controller.updateProduct
     );
 
-    this.router.put(`${this.path}/:id`, this.controller.updateProduct);
+    this.router.put(
+      `${this.path}/:id`,
+      Validator(updateProductSchema),
+      this.controller.updateProduct
+    );
 
     this.router.delete(`${this.path}/:id`, this.controller.deleteSingleProduct);
   }
