@@ -209,6 +209,18 @@ class ProductService {
       throw err;
     }
   }
+
+  public async deleteSingleProduct(id: number) {
+    try {
+      return await prisma.product.delete({
+        where: {
+          id,
+        },
+      });
+    } catch (err) {
+      throw err;
+    }
+  }
 }
 
 export default ProductService;
