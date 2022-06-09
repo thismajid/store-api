@@ -3,7 +3,7 @@ import { Router } from "express";
 import { Routes } from "./../interfaces/route.interface";
 import ProductController from "../controllers/product.controller";
 import { Validator } from "../middlewares/validator.middleware";
-import productSchema from "../validators/product.validator";
+import { createProductSchema } from "../validators/product.validator";
 
 export class ProductsRoute implements Routes {
   public router = Router();
@@ -19,7 +19,7 @@ export class ProductsRoute implements Routes {
 
     this.router.post(
       this.path,
-      Validator(productSchema),
+      Validator(createProductSchema),
       this.controller.addProduct
     );
 
