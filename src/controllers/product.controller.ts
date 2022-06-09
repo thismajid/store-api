@@ -8,6 +8,7 @@ import ProductService from "../services/product.service";
 import isEmpty from "../utils/isEmpty.util";
 import CategoryService from "../services/category.service";
 import RatingService from "../services/rating.service";
+import ProductNotFoundException from "../exceptions/ProductNotFoundException";
 
 const prisma = new PrismaClient();
 const productsService = new ProductService();
@@ -133,6 +134,25 @@ class ProductController {
       res.json({
         message: "all products retrieved successfully",
         products,
+      });
+    } catch (err) {
+      logger.error(err);
+      next(err);
+    }
+  }
+
+  public async deleteSingleProduct(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
+    try {
+      const { id } = req.params;
+      const foundProduct = await productsService.getSingleProduct(+id);
+      if (!foundProduct) throw new ProductNotFoundException(+id);
+      // await productsService.deleteSingleProduct(+id);
+      res.json({
+        message: `product with id ${id} deleted successfully`,
       });
     } catch (err) {
       logger.error(err);
