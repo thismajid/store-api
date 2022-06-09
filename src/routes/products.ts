@@ -3,7 +3,10 @@ import { Router } from "express";
 import { Routes } from "./../interfaces/route.interface";
 import ProductController from "../controllers/product.controller";
 import { Validator } from "../middlewares/validator.middleware";
-import { createProductSchema } from "../validators/product.validator";
+import {
+  createProductSchema,
+  updateProductSchema,
+} from "../validators/product.validator";
 
 export class ProductsRoute implements Routes {
   public router = Router();
@@ -30,7 +33,11 @@ export class ProductsRoute implements Routes {
       this.controller.getAllProductsInCategory
     );
 
-    this.router.patch(`${this.path}/:id`, this.controller.updateProduct);
+    this.router.patch(
+      `${this.path}/:id`,
+      Validator(updateProductSchema),
+      this.controller.updateProduct
+    );
 
     this.router.put(`${this.path}/:id`, this.controller.updateProduct);
 
