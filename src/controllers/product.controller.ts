@@ -141,6 +141,32 @@ class ProductController {
     }
   }
 
+  public async updateProduct(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { id } = req.params;
+      const { title, description, price, category, image } = req.body;
+      const foundCategory = await categoriesService.getCategoryByName(category);
+      if (!foundCategory?.id) {
+        throw new CategoryNotFoundException(category);
+      }
+      const product = {
+        id: +id,
+        title,
+        description,
+        price,
+        category: foundCategory?.id,
+        image,
+      };
+      // await productsService.updateProduct(product);
+      res.json({
+        message: `product with id ${id} updated successfully`,
+      });
+    } catch (err) {
+      logger.error(err);
+      next(err);
+    }
+  }
+
   public async deleteSingleProduct(
     req: Request,
     res: Response,
