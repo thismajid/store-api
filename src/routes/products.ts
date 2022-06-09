@@ -30,6 +30,8 @@ export class ProductsRoute implements Routes {
       this.controller.getAllProductsInCategory
     );
 
+    this.router.patch(`${this.path}/:id`, this.controller.updateProduct);
+
     this.router.delete(`${this.path}/:id`, this.controller.deleteSingleProduct);
   }
 }
