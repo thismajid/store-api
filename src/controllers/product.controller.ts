@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { PrismaClient } from "@prisma/client";
+import { Prisma, PrismaClient } from "@prisma/client";
 
 import logger from "../utils/logger";
 import Redisio from "../services/redis.service";
@@ -24,11 +24,13 @@ class ProductController {
     try {
       let products;
       if (!isEmpty(req.query)) {
-        const take = Number(req.query.limit) || 10;
-        const skip = Number(req.query.skip) || 0;
+        const condition = {
+          take: Number(req.query.limit) || 10,
+          skip: Number(req.query.skip) || 0,
+          order: (req.query.sort as Prisma.SortOrder) || "asc",
+        };
         products = await productsService.getAllProductsWithPagination(
-          take,
-          skip
+          condition
         );
       } else {
         products = await productRedis.hget("products");
