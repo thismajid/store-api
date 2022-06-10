@@ -1,15 +1,22 @@
 import { PrismaClient } from "@prisma/client";
+import { Paginate } from "../interfaces/paginate.interface";
 
 const prisma = new PrismaClient();
 
 class ProductService {
   constructor() {}
 
-  public async getAllProductsWithPagination(skip: number, take: number) {
+  public async getAllProductsWithPagination(condition: Paginate) {
     try {
+      const { skip, take, order } = condition;
       return await prisma.product.findMany({
         skip,
         take,
+        orderBy: [
+          {
+            id: order,
+          },
+        ],
         include: {
           author: {
             select: {
