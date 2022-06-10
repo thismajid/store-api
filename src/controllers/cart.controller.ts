@@ -4,38 +4,21 @@ import { PrismaClient } from "@prisma/client";
 import logger from "../utils/logger";
 import Redisio from "../services/redis.service";
 import isEmpty from "../utils/isEmpty.util";
+import CartService from "../services/cart.service";
 
 const prisma = new PrismaClient();
 const cartsRedis = new Redisio("carts");
+const cartsService = new CartService();
 
 class CartController {
   constructor() {}
 
   public async getAllCarts(req: Request, res: Response, next: NextFunction) {
-    // let carts = await prisma.cart.findMany({
-    //   include: {
-    //     user: true,
-    //     cartItems: {
-    //       include: {
-    //         product: true,
-    //       },
-    //     },
-    //   },
-    // });
     let carts;
     try {
       carts = await cartsRedis.hget("carts");
       if (isEmpty(carts)) {
-        carts = await prisma.cart.findMany({
-          include: {
-            user: true,
-            cartItems: {
-              include: {
-                product: true,
-              },
-            },
-          },
-        });
+        carts = await cartsService.getAllCarts();
         cartsRedis.hmset(carts, "carts");
       }
       res.json({
