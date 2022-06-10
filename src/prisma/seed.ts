@@ -18,11 +18,27 @@ async function main() {
       data: ratings,
     }),
   ]);
-
   products.map(async (product) => {
     await prisma.product.create({
       data: product,
     });
+  });
+  await prisma.cart.create({
+    data: {
+      userId: 1,
+      cartItems: {
+        create: [
+          {
+            productId: 2,
+            quantity: 1,
+          },
+          {
+            productId: 3,
+            quantity: 2,
+          },
+        ],
+      },
+    },
   });
 }
 
