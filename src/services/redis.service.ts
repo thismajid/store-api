@@ -17,6 +17,7 @@ class Redisio {
       products: new Redis({ ...options, db: 7 }),
       productsInCategory: new Redis({ ...options, db: 8 }),
       categories: new Redis({ ...options, db: 9 }),
+      carts: new Redis({ ...options, db: 10 }),
     };
     Object.assign(instance, {
       redisClient1: instance.products,
@@ -45,7 +46,9 @@ class Redisio {
   }
 
   hmset(inputs: any, model: string, keyName?: string) {
-    if (["products", "productsInCategory", "categories"].includes(model)) {
+    if (
+      ["products", "productsInCategory", "categories", "carts"].includes(model)
+    ) {
       let key;
       if (Array.isArray(inputs)) {
         key = keyName ? `${model}:${keyName}` : `${model}`;
