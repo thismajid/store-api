@@ -1,15 +1,16 @@
 import { PrismaClient } from "@prisma/client";
-import { createAdminUser } from "./seeds/create-admin-user";
+import { users } from "./seeds/users";
 import { categories } from "./seeds/categories";
 import { products } from "./seeds/products";
 import { ratings } from "./seeds/ratings";
+import { carts } from "./seeds/carts";
 
 const prisma = new PrismaClient();
 
 async function main() {
   await prisma.$transaction([
     prisma.user.createMany({
-      data: createAdminUser,
+      data: users,
     }),
     prisma.category.createMany({
       data: categories,
@@ -18,27 +19,15 @@ async function main() {
       data: ratings,
     }),
   ]);
-  products.map(async (product) => {
+  products.map(async (product: any) => {
     await prisma.product.create({
       data: product,
     });
   });
-  await prisma.cart.create({
-    data: {
-      userId: 1,
-      cartItems: {
-        create: [
-          {
-            productId: 2,
-            quantity: 1,
-          },
-          {
-            productId: 3,
-            quantity: 2,
-          },
-        ],
-      },
-    },
+  carts.map(async (cart: any) => {
+    await prisma.cart.create({
+      data: cart,
+    });
   });
 }
 
