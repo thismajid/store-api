@@ -55,6 +55,30 @@ class CartController {
       logger.error(err);
     }
   }
+
+  public async deleteCartItems(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
+    let cart;
+    try {
+      const { id } = req.params;
+      cart = await cartsService.getSingleCart(+id);
+      if (isEmpty(cart)) {
+        return res.json({
+          message: `cart with id: ${id} does not exist.`,
+        });
+      }
+      res.json({
+        message: `cart with id: ${id} deleted successfully`,
+        cart,
+      });
+    } catch (err) {
+      logger.error(err);
+      next(err);
+    }
+  }
 }
 
 export default CartController;
