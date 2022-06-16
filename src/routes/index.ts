@@ -1,10 +1,10 @@
-import { Router , Request, Response } from 'express';
-import {Routes} from "../interfaces/route.interface";
+import { Router } from "express";
+
+import { Routes } from "../interfaces/route.interface";
 
 class IndexRoute implements Routes {
   public router = Router();
-  public path = '/';
-
+  public path = "/";
 
   constructor() {
     this.initializeRoutes();
