@@ -74,7 +74,6 @@ class CartController {
       }
       res.json({
         message: `cart with id: ${id} deleted successfully`,
-        cart,
       });
     } catch (err) {
       logger.error(err);
