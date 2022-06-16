@@ -39,13 +39,13 @@ class CartController {
   }
 
   public async getSingleCart(req: Request, res: Response, next: NextFunction) {
-    let carts;
+    let cart;
     try {
       const { id } = req.params;
-      let cart = await cartsRedis.hget("carts", { id: +id });
+      cart = await cartsRedis.hget("carts", { id: +id });
       if (isEmpty(cart)) {
         cart = await cartsService.getSingleCart(+id);
-        cartsRedis.hmset(carts, "cart");
+        cartsRedis.hmset(cart, "cart");
       }
       res.json({
         message: `cart with id: ${id} retrieved successfully`,
