@@ -14,5 +14,7 @@ export class CartRoute implements Routes {
 
   private initializeRoutes() {
     this.router.get(this.path, this.controller.getAllCarts);
+
+    this.router.get(`${this.path}/:id`, this.controller.getSingleCart);
   }
 }
