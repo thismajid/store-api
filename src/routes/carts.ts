@@ -16,5 +16,7 @@ export class CartRoute implements Routes {
     this.router.get(this.path, this.controller.getAllCarts);
 
     this.router.get(`${this.path}/:id`, this.controller.getSingleCart);
+
+    this.router.delete(`${this.path}/:id`, this.controller.deleteCartItems);
   }
 }
