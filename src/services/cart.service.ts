@@ -47,6 +47,26 @@ class CartService {
       throw err;
     }
   }
+
+  public async getSingleCart(id: Number) {
+    try {
+      return await prisma.cart.findMany({
+        where: {
+          id: +id,
+        },
+        include: {
+          user: true,
+          cartItems: {
+            include: {
+              product: true,
+            },
+          },
+        },
+      });
+    } catch (err) {
+      throw err;
+    }
+  }
 }
 
 export default CartService;
