@@ -37,6 +37,24 @@ class CartController {
       logger.error(err);
     }
   }
+
+  public async getSingleCart(req: Request, res: Response, next: NextFunction) {
+    let carts;
+    try {
+      const { id } = req.params;
+      let cart = await cartsRedis.hget("carts", { id: +id });
+      if (isEmpty(cart)) {
+        cart = await cartsService.getSingleCart(+id);
+        cartsRedis.hmset(carts, "cart");
+      }
+      res.json({
+        message: `cart with id: ${id} retrieved successfully`,
+        cart,
+      });
+    } catch (err) {
+      logger.error(err);
+    }
+  }
 }
 
 export default CartController;
