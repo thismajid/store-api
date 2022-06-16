@@ -35,6 +35,7 @@ class CartController {
       });
     } catch (err) {
       logger.error(err);
+      next(err);
     }
   }
 
