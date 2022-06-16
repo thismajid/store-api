@@ -5,7 +5,8 @@ import path from "path";
 import morganMiddleware from "./middlewares/morgan.middleware";
 import errorMiddleware from "./middlewares/error.middleware";
 import logger from "./utils/logger";
-import Routes from "./routes";
+
+import { Routes } from "./interfaces/route.interface";
 
 dotenv.config();
 
