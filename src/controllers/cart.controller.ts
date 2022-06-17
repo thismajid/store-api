@@ -58,6 +58,31 @@ class CartController {
     }
   }
 
+  public async updateCartItems(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
+    let cart;
+    try {
+      const { id } = req.params;
+      const { productId, quantity } = req.body;
+      cart = await cartsService.getSingleCart(+id);
+      if (isEmpty(cart)) {
+        return res.json({
+          message: `cart with id: ${id} does not exist.`,
+        });
+      }
+      res.json({
+        message: `cart with id: ${id} updated successfully`,
+        cart,
+      });
+    } catch (err) {
+      logger.error(err);
+      next(err);
+    }
+  }
+
   public async deleteCartItems(
     req: Request,
     res: Response,
