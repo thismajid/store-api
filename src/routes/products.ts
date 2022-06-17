@@ -6,6 +6,7 @@ import { Validator } from "../middlewares/validator.middleware";
 import {
   createProductSchema,
   updateProductSchema,
+  getSingleProductSchema,
 } from "../validators/product.validator";
 
 export class ProductsRoute implements Routes {
@@ -26,7 +27,11 @@ export class ProductsRoute implements Routes {
       this.controller.addProduct
     );
 
-    this.router.get(`${this.path}/:id`, this.controller.getSingleProduct);
+    this.router.get(
+      `${this.path}/:id`,
+      Validator(getSingleProductSchema),
+      this.controller.getSingleProduct
+    );
 
     this.router.get(
       `${this.path}/category/:categoryName`,
