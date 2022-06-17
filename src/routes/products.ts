@@ -7,6 +7,7 @@ import {
   createProductSchema,
   updateProductSchema,
   getSingleProductSchema,
+  getProductsByCategoryName,
 } from "../validators/product.validator";
 
 export class ProductsRoute implements Routes {
@@ -35,6 +36,7 @@ export class ProductsRoute implements Routes {
 
     this.router.get(
       `${this.path}/category/:categoryName`,
+      Validator(getProductsByCategoryName),
       this.controller.getAllProductsInCategory
     );
 
