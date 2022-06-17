@@ -23,6 +23,8 @@ const getSingleProductSchema = Joi.object({
 
 const getProductsByCategoryName = Joi.object({
   categoryName: Joi.string().required(),
+  limit: Joi.number().integer().required(),
+  skip: Joi.number().integer().required(),
 });
 
 export {
