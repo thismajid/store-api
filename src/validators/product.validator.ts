@@ -17,4 +17,8 @@ const updateProductSchema = Joi.object({
   category: Joi.string().required(),
 });
 
-export { createProductSchema, updateProductSchema };
+const getSingleProductSchema = Joi.object({
+  id: Joi.number().integer().required(),
+});
+
+export { createProductSchema, updateProductSchema, getSingleProductSchema };
