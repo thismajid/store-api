@@ -21,4 +21,13 @@ const getSingleProductSchema = Joi.object({
   id: Joi.number().integer().required(),
 });
 
-export { createProductSchema, updateProductSchema, getSingleProductSchema };
+const getProductsByCategoryName = Joi.object({
+  categoryName: Joi.string().required(),
+});
+
+export {
+  createProductSchema,
+  updateProductSchema,
+  getSingleProductSchema,
+  getProductsByCategoryName,
+};
