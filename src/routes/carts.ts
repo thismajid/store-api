@@ -2,6 +2,8 @@ import { Router } from "express";
 
 import { Routes } from "./../interfaces/route.interface";
 import CartController from "../controllers/cart.controller";
+import { Validator } from "../middlewares/validator.middleware";
+import { getSingleCartSchema } from "../validators/cart.validator";
 
 export class CartRoute implements Routes {
   public router = Router();
@@ -15,7 +17,11 @@ export class CartRoute implements Routes {
   private initializeRoutes() {
     this.router.get(this.path, this.controller.getAllCarts);
 
-    this.router.get(`${this.path}/:id`, this.controller.getSingleCart);
+    this.router.get(
+      `${this.path}/:id`,
+      Validator(getSingleCartSchema),
+      this.controller.getSingleCart
+    );
 
     this.router.put(`${this.path}/:id`, this.controller.updateCartItems);
 
