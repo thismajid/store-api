@@ -7,7 +7,8 @@ import {
   createProductSchema,
   updateProductSchema,
   getSingleProductSchema,
-  getProductsByCategoryName,
+  getProductsByCategoryNameSchema,
+  getAllProductsSchema,
 } from "../validators/product.validator";
 
 export class ProductsRoute implements Routes {
@@ -20,7 +21,11 @@ export class ProductsRoute implements Routes {
   }
 
   private initializeRoutes() {
-    this.router.get(this.path, this.controller.getAllProducts);
+    this.router.get(
+      this.path,
+      Validator(getAllProductsSchema),
+      this.controller.getAllProducts
+    );
 
     this.router.post(
       this.path,
@@ -36,7 +41,7 @@ export class ProductsRoute implements Routes {
 
     this.router.get(
       `${this.path}/category/:categoryName`,
-      Validator(getProductsByCategoryName),
+      Validator(getProductsByCategoryNameSchema),
       this.controller.getAllProductsInCategory
     );
 
