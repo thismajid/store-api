@@ -25,6 +25,10 @@ export class CartRoute implements Routes {
 
     this.router.put(`${this.path}/:id`, this.controller.updateCartItems);
 
-    this.router.delete(`${this.path}/:id`, this.controller.deleteCartItems);
+    this.router.delete(
+      `${this.path}/:id`,
+      Validator(getSingleCartSchema),
+      this.controller.deleteCartItems
+    );
   }
 }
