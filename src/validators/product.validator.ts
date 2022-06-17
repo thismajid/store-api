@@ -21,8 +21,13 @@ const getSingleProductSchema = Joi.object({
   id: Joi.number().integer().required(),
 });
 
-const getProductsByCategoryName = Joi.object({
+const getProductsByCategoryNameSchema = Joi.object({
   categoryName: Joi.string().required(),
+  limit: Joi.number().integer().required(),
+  skip: Joi.number().integer().required(),
+});
+
+const getAllProductsSchema = Joi.object({
   limit: Joi.number().integer().required(),
   skip: Joi.number().integer().required(),
 });
@@ -31,5 +36,6 @@ export {
   createProductSchema,
   updateProductSchema,
   getSingleProductSchema,
-  getProductsByCategoryName,
+  getProductsByCategoryNameSchema,
+  getAllProductsSchema,
 };
