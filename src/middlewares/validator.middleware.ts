@@ -6,7 +6,9 @@ import UnprocessableEntityException from "../exceptions/UnprocessableEntityExcep
 export function Validator(schema: ObjectSchema) {
   return (req: Request, res: Response, next: NextFunction) => {
     const params =
-      req.method === "GET" ? req.params : { ...req.params, ...req.body };
+      req.method === "GET"
+        ? { ...req.params, ...req.query }
+        : { ...req.params, ...req.body };
     const { error } = schema.validate(params, {
       abortEarly: false,
       messages: {
