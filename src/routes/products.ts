@@ -57,6 +57,10 @@ export class ProductsRoute implements Routes {
       this.controller.updateProduct
     );
 
-    this.router.delete(`${this.path}/:id`, this.controller.deleteSingleProduct);
+    this.router.delete(
+      `${this.path}/:id`,
+      Validator(getSingleProductSchema),
+      this.controller.deleteSingleProduct
+    );
   }
 }
