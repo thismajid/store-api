@@ -14,5 +14,7 @@ export class CategoryRoute implements Routes {
 
   private initializeRoutes() {
     this.router.get(this.path, this.controller.getAllCategories);
+
+    this.router.get(`${this.path}/:id`, this.controller.getSingleCategory);
   }
 }
