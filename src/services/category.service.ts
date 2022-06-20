@@ -16,6 +16,18 @@ class CategoryService {
       throw err;
     }
   }
+
+  public async getSingleCategory(id: number) {
+    try {
+      return await prisma.category.findUnique({
+        where: {
+          id,
+        },
+      });
+    } catch (err) {
+      throw err;
+    }
+  }
 }
 
 export default CategoryService;
