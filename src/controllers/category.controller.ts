@@ -1,9 +1,10 @@
 import { Request, Response, NextFunction } from "express";
-import { PrismaClient } from "@prisma/client";
+import { Prisma, PrismaClient } from "@prisma/client";
 
 import logger from "../utils/logger";
 import Redisio from "../services/redis.service";
 import CategoryService from "../services/category.service";
+import isEmpty from "../utils/isEmpty.util";
 
 const prisma = new PrismaClient();
 const categoriesService = new CategoryService();
@@ -17,11 +18,24 @@ class CategoryController {
     res: Response,
     next: NextFunction
   ) {
-    let categories = await categoriesRedis.hget("categories");
-    if (!categories) {
-      categories = await prisma.category.findMany({});
-      await categoriesRedis.hmset(categories, "categories");
+    let categories;
+    if (!isEmpty(req.query)) {
+      const condition = {
+        take: Number(req.query.limit) || 10,
+        skip: Number(req.query.skip) || 0,
+        order: (req.query.sort as Prisma.SortOrder) || "asc",
+      };
+      categories = await categoriesService.getAllCategoriesWithPagination(
+        condition
+      );
+    } else {
+      categories = await categoriesRedis.hget("categories");
+      if (!categories) {
+        categories = await prisma.category.findMany({});
+        await categoriesRedis.hmset(categories, "categories");
+      }
     }
+
     res.json({
       message: "all categories retrieved successfully",
       categories,
