@@ -31,7 +31,7 @@ class CategoryController {
     } else {
       categories = await categoriesRedis.hget("categories");
       if (!categories) {
-        categories = await prisma.category.findMany({});
+        categories = await categoriesService.getAllCategories();
         await categoriesRedis.hmset(categories, "categories");
       }
     }
