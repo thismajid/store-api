@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client";
+import { Paginate } from "../interfaces/paginate.interface";
 
 const prisma = new PrismaClient();
 
@@ -23,6 +24,23 @@ class CategoryService {
         where: {
           id,
         },
+      });
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  public async getAllCategoriesWithPagination(condition: Paginate) {
+    try {
+      const { skip, take, order } = condition;
+      return await prisma.category.findMany({
+        skip,
+        take,
+        orderBy: [
+          {
+            id: order,
+          },
+        ],
       });
     } catch (err) {
       throw err;
