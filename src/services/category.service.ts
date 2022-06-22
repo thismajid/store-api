@@ -46,6 +46,14 @@ class CategoryService {
       throw err;
     }
   }
+
+  public async getAllCategories() {
+    try {
+      return await prisma.category.findMany({});
+    } catch (err) {
+      throw err;
+    }
+  }
 }
 
 export default CategoryService;
