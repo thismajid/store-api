@@ -5,6 +5,7 @@ import logger from "../utils/logger";
 import Redisio from "../services/redis.service";
 import CategoryService from "../services/category.service";
 import isEmpty from "../utils/isEmpty.util";
+import CategoryNotFoundException from "../exceptions/CategoryNotFoundException";
 
 const prisma = new PrismaClient();
 const categoriesService = new CategoryService();
@@ -72,14 +73,15 @@ class CategoryController {
     res: Response,
     next: NextFunction
   ) {
-    const { id } = req.params;
-    const category = await categoriesService.getSingleCategory(+id);
-    if (!category) {
-    }
-    res.json({
-      message: `category with id: ${id} deleted successfully`,
-    });
     try {
+      const { id } = req.params;
+      const category = await categoriesService.getSingleCategory(+id);
+      if (!category) {
+        throw new CategoryNotFoundException(+id);
+      }
+      res.json({
+        message: `category with id: ${id} deleted successfully`,
+      });
     } catch (err) {
       logger.error(err);
     }
