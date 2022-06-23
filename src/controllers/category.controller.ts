@@ -44,6 +44,7 @@ class CategoryController {
     try {
     } catch (err) {
       logger.error(err);
+      next(err);
     }
   }
 
