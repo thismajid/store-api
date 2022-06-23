@@ -19,29 +19,29 @@ class CategoryController {
     res: Response,
     next: NextFunction
   ) {
-    let categories;
-    if (!isEmpty(req.query)) {
-      const condition = {
-        take: Number(req.query.limit) || 10,
-        skip: Number(req.query.skip) || 0,
-        order: (req.query.sort as Prisma.SortOrder) || "asc",
-      };
-      categories = await categoriesService.getAllCategoriesWithPagination(
-        condition
-      );
-    } else {
-      categories = await categoriesRedis.hget("categories");
-      if (!categories) {
-        categories = await categoriesService.getAllCategories();
-        await categoriesRedis.hmset(categories, "categories");
-      }
-    }
-
-    res.json({
-      message: "all categories retrieved successfully",
-      categories,
-    });
     try {
+      let categories;
+      if (!isEmpty(req.query)) {
+        const condition = {
+          take: Number(req.query.limit) || 10,
+          skip: Number(req.query.skip) || 0,
+          order: (req.query.sort as Prisma.SortOrder) || "asc",
+        };
+        categories = await categoriesService.getAllCategoriesWithPagination(
+          condition
+        );
+      } else {
+        categories = await categoriesRedis.hget("categories");
+        if (!categories) {
+          categories = await categoriesService.getAllCategories();
+          await categoriesRedis.hmset(categories, "categories");
+        }
+      }
+
+      res.json({
+        message: "all categories retrieved successfully",
+        categories,
+      });
     } catch (err) {
       logger.error(err);
       next(err);
