@@ -84,6 +84,7 @@ class CategoryController {
       });
     } catch (err) {
       logger.error(err);
+      next(err);
     }
   }
 }
