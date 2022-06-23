@@ -66,6 +66,24 @@ class CategoryController {
       logger.error(err);
     }
   }
+
+  public async deleteSingleCategory(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
+    const { id } = req.params;
+    const category = await categoriesService.getSingleCategory(+id);
+    if (!category) {
+    }
+    res.json({
+      message: `category with id: ${id} deleted successfully`,
+    });
+    try {
+    } catch (err) {
+      logger.error(err);
+    }
+  }
 }
 
 export default CategoryController;
