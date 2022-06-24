@@ -6,6 +6,7 @@ import Redisio from "../services/redis.service";
 import CategoryService from "../services/category.service";
 import isEmpty from "../utils/isEmpty.util";
 import CategoryNotFoundException from "../exceptions/CategoryNotFoundException";
+import CategoryHasExistException from "../exceptions/CategoryHasExistException";
 
 const prisma = new PrismaClient();
 const categoriesService = new CategoryService();
@@ -84,6 +85,30 @@ class CategoryController {
       res.json({
         message: `category with id: ${id} deleted successfully`,
       });
+    } catch (err) {
+      logger.error(err);
+      next(err);
+    }
+  }
+
+  public async addCategory(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { name } = req.body;
+      const foundCategory = await categoriesService.getCategoryByName(name);
+      if (foundCategory?.id) throw new CategoryHasExistException(name);
+      // const product = {
+      //   id: 21,
+      //   title,
+      //   description,
+      //   price,
+      //   category: foundCategory?.id,
+      //   image,
+      // };
+      // const [productRating, newProduct] = await Promise.all([
+      //   ratingsService.createOrUpdate(21),
+      //   productsService.createOrUpdate(product),
+      // ]);
+      // res.json(newProduct);
     } catch (err) {
       logger.error(err);
       next(err);
