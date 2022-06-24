@@ -17,6 +17,8 @@ export class CategoryRoute implements Routes {
 
     this.router.get(`${this.path}/:id`, this.controller.getSingleCategory);
 
+    this.router.post(`${this.path}`, this.controller.addCategory);
+
     this.router.delete(
       `${this.path}/:id`,
       this.controller.deleteSingleCategory
