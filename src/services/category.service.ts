@@ -54,6 +54,25 @@ class CategoryService {
       throw err;
     }
   }
+
+  public async createOrUpdate(category: any) {
+    try {
+      const { id, name } = category;
+      return await prisma.category.upsert({
+        where: { id: +id },
+        update: {
+          name,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        create: {
+          name,
+        },
+      });
+    } catch (err) {
+      throw err;
+    }
+  }
 }
 
 export default CategoryService;
