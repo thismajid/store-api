@@ -96,19 +96,12 @@ class CategoryController {
       const { name } = req.body;
       const foundCategory = await categoriesService.getCategoryByName(name);
       if (foundCategory?.id) throw new CategoryHasExistException(name);
-      // const product = {
-      //   id: 21,
-      //   title,
-      //   description,
-      //   price,
-      //   category: foundCategory?.id,
-      //   image,
-      // };
-      // const [productRating, newProduct] = await Promise.all([
-      //   ratingsService.createOrUpdate(21),
-      //   productsService.createOrUpdate(product),
-      // ]);
-      // res.json(newProduct);
+      const category = {
+        id: 5,
+        name,
+      };
+      const newCategory = await categoriesService.createOrUpdate(category);
+      res.json(newCategory);
     } catch (err) {
       logger.error(err);
       next(err);
