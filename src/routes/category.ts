@@ -21,6 +21,8 @@ export class CategoryRoute implements Routes {
 
     this.router.put(`${this.path}/:id`, this.controller.updateCategory);
 
+    this.router.patch(`${this.path}/:id`, this.controller.updateCategory);
+
     this.router.delete(
       `${this.path}/:id`,
       this.controller.deleteSingleCategory
