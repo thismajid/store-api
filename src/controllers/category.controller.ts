@@ -107,6 +107,28 @@ class CategoryController {
       next(err);
     }
   }
+
+  public async updateCategory(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { id } = req.params;
+      const { name } = req.body;
+      const foundCategory = await categoriesService.getSingleCategory(+id);
+      if (!foundCategory?.id) {
+        throw new CategoryNotFoundException(name);
+      }
+      const updateCategory = {
+        id: +id,
+        name,
+      };
+      // await productsService.updateProduct(product);
+      res.json({
+        message: `category with id: ${id} updated successfully`,
+      });
+    } catch (err) {
+      logger.error(err);
+      next(err);
+    }
+  }
 }
 
 export default CategoryController;
