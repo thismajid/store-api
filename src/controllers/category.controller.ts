@@ -120,7 +120,7 @@ class CategoryController {
         id: +id,
         name,
       };
-      // await productsService.updateProduct(product);
+      // await categoriesService.updateCategory(updateCategory);
       res.json({
         message: `category with id: ${id} updated successfully`,
       });
