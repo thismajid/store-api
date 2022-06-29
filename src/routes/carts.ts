@@ -32,6 +32,12 @@ export class CartRoute implements Routes {
       this.controller.updateCartItems
     );
 
+    this.router.patch(
+      `${this.path}/:id`,
+      Validator(updateCartItemsSchema),
+      this.controller.updateCartItems
+    );
+
     this.router.delete(
       `${this.path}/:id`,
       Validator(getSingleCartSchema),
