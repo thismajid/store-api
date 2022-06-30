@@ -1,3 +1,3 @@
-import { CreateProduct } from "./create-product.interface";
+import { Product } from "./product.interface";
 
-export interface UpdateProduct extends CreateProduct {}
+export interface UpdateProduct extends Product {}
