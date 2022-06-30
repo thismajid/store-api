@@ -10,6 +10,7 @@ import CategoryService from "../services/category.service";
 import RatingService from "../services/rating.service";
 import ProductNotFoundException from "../exceptions/ProductNotFoundException";
 import { CreateProduct } from "../interfaces/product/create-product.interface";
+import { UpdateProduct } from "../interfaces/product/update-product.interface";
 
 const productsService = new ProductService();
 const categoriesService = new CategoryService();
@@ -151,7 +152,7 @@ class ProductController {
       if (!foundCategory?.id) {
         throw new CategoryNotFoundException(category);
       }
-      const product = {
+      const product: UpdateProduct = {
         id: +id,
         title,
         description,
