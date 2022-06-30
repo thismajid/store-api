@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { Prisma, PrismaClient } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 
 import logger from "../utils/logger";
 import Redisio from "../services/redis.service";
@@ -10,7 +10,6 @@ import CategoryService from "../services/category.service";
 import RatingService from "../services/rating.service";
 import ProductNotFoundException from "../exceptions/ProductNotFoundException";
 
-const prisma = new PrismaClient();
 const productsService = new ProductService();
 const categoriesService = new CategoryService();
 const ratingsService = new RatingService();
