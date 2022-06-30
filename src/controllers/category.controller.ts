@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { Prisma, PrismaClient } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 
 import logger from "../utils/logger";
 import Redisio from "../services/redis.service";
@@ -8,7 +8,6 @@ import isEmpty from "../utils/isEmpty.util";
 import CategoryNotFoundException from "../exceptions/CategoryNotFoundException";
 import CategoryHasExistException from "../exceptions/CategoryHasExistException";
 
-const prisma = new PrismaClient();
 const categoriesService = new CategoryService();
 const categoriesRedis = new Redisio("categories");
 
