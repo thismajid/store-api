@@ -1,0 +1,531 @@
+{
+	"info": {
+		"_postman_id": "36d2cff2-30bd-42b3-9e60-979226cc2485",
+		"name": "store api",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "14558940"
+	},
+	"item": [
+		{
+			"name": "products",
+			"item": [
+				{
+					"name": "get all products",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/products?limit=5&sort=desc",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"products"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "5"
+								},
+								{
+									"key": "skip",
+									"value": "10",
+									"disabled": true
+								},
+								{
+									"key": "sort",
+									"value": "desc"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get single product",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/products/21",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"products",
+								"21"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "all products in a category",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/products/category/:categoryName?limit=5&skip=10",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"products",
+								"category",
+								":categoryName"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "5"
+								},
+								{
+									"key": "skip",
+									"value": "10"
+								}
+							],
+							"variable": [
+								{
+									"key": "categoryName",
+									"value": "jewelery"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add a new product",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"test majddsdswdsdsid mm ffsfs\",\r\n     \"description\": \"lorem ipsufffm set\",\r\n    \"category\": \"jewel3ery\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/products",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update product",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n                    \"title\": \"test product\",\r\n                    \"price\": 13.5,\r\n                    \"description\": \"lorem ipsum set\",\r\n                    \"image\": \"https://i.pravatar.cc\",\r\n                    \"category\": \"electronics\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/products/:id",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"products",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "12"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update product - put method",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n                    \"title\": \"test product\",\r\n                    \"price\": 13.5,\r\n                    \"description\": \"lorem ipsum set\",\r\n                    \"image\": \"https://i.pravatar.cc\",\r\n                    \"category\": \"electronics\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/products/:id",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"products",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "12"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete single product",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/products/:id",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"products",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "12"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "categories",
+			"item": [
+				{
+					"name": "get all categories",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/categories?skip=2&sort=desc",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"categories"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "5",
+									"disabled": true
+								},
+								{
+									"key": "skip",
+									"value": "2"
+								},
+								{
+									"key": "sort",
+									"value": "desc"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get single category",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/categories/2",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"categories",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create a category",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "name",
+									"value": "new category",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/api/categories",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"categories"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update category",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "name",
+									"value": "update category",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/api/categories/:id",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"categories",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update category",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "name",
+									"value": "update category",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/api/categories/:id",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"categories",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete single category",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/categories/2",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"categories",
+								"2"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "carts",
+			"item": [
+				{
+					"name": "get all carts",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/carts",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"carts"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "5",
+									"disabled": true
+								},
+								{
+									"key": "skip",
+									"value": "10",
+									"disabled": true
+								},
+								{
+									"key": "sort",
+									"value": "desc",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get single cart",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/carts/2",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"carts",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete cart items",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/carts/2",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"carts",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update cart items",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n                        \"products\":[{\"productId\":2,\"quantity\":3}]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/carts/2",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"carts",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update cart items",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n                        \"products\":[{\"productId\":2,\"quantity\":3}]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/carts/2",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"carts",
+								"2"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
