@@ -7,6 +7,7 @@ import CategoryService from "../services/category.service";
 import isEmpty from "../utils/isEmpty.util";
 import CategoryNotFoundException from "../exceptions/CategoryNotFoundException";
 import CategoryHasExistException from "../exceptions/CategoryHasExistException";
+import { CreateCategory } from "../interfaces/category/create-category.interface";
 
 const categoriesService = new CategoryService();
 const categoriesRedis = new Redisio("categories");
@@ -95,7 +96,7 @@ class CategoryController {
       const { name } = req.body;
       const foundCategory = await categoriesService.getCategoryByName(name);
       if (foundCategory?.id) throw new CategoryHasExistException(name);
-      const category = {
+      const category: CreateCategory = {
         id: 5,
         name,
       };
